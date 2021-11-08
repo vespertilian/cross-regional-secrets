@@ -164,7 +164,7 @@
     "@aws-cdk/cx-api" "1.131.0"
     constructs "^3.3.69"
 
-"@aws-cdk/aws-lambda@1.131.0", "@aws-cdk/aws-lambda@^1.77.0":
+"@aws-cdk/aws-lambda@1.131.0", "@aws-cdk/aws-lambda@^1.77.0", "@aws-cdk/aws-lambda@^1.95.2":
   version "1.131.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-lambda/-/aws-lambda-1.131.0.tgz#65e14e2070f4c2664764ccdcdfafe81210279bf2"
   integrity sha512-yTk/GL6WzJdgyjTUdgnOrtMvrhzJfdRQI5zKeF9ybvwKFrXB9vjgLsg7vm4awZKYqUi1PEbs2cYFwjdSiUe1Rg==

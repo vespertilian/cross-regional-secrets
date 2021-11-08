@@ -1,0 +1,16 @@
+SecretArnOutput	arn:aws:secretsmanager:ap-northeast-1:340227574277:secret:AuthToken-mDUhhp	-	-
+SecretFullArnOutput	arn:aws:secretsmanager:ap-northeast-1:340227574277:secret:AuthToken-mDUhhp	-	-
+SecretNameOutput	AuthToken	-	-
+SecretParameterName	/my-secret-stack/AuthToken
+
+
+
+importedSecretArnOutput	arn:aws:secretsmanager:ap-northeast-1:340227574277:secret:AuthToken-mDUhhp
+
+
+importedSecretArnOutput	arn:aws:secretsmanager:ap-northeast-1:340227574277:secret:AuthToken-mDUhhp
+
+
+arn:aws:secretsmanager:us-east-1:340227574277:secret:AuthToken-mDUhhp
+
+arn:aws:secretsmanager:ap-northeast-1:340227574277:secret:AuthToken

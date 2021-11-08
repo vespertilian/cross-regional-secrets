@@ -6,6 +6,7 @@ const project = new AwsCdkTypeScriptApp({
   cdkDependencies: [
     '@aws-cdk/aws-secretsmanager',
     '@aws-cdk/aws-ssm',
+    '@aws-cdk/aws-lambda',
   ],
   deps: [
     'cdk-remote-stack',

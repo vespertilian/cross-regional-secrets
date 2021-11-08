@@ -83,6 +83,11 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-cdk/aws-lambda",
+      "version": "^1.95.2",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-cdk/aws-secretsmanager",
       "version": "^1.95.2",
       "type": "runtime"
