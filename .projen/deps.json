@@ -88,8 +88,17 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-cdk/aws-ssm",
+      "version": "^1.95.2",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-cdk/core",
       "version": "^1.95.2",
+      "type": "runtime"
+    },
+    {
+      "name": "cdk-remote-stack",
       "type": "runtime"
     }
   ],
