@@ -47,4 +47,5 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/.gitpod.yml
 !/.github/workflows/upgrade.yml
