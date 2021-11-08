@@ -34,9 +34,8 @@ let gitpod = new Gitpod(project, {
 
 /* spellchecker: disable */
 gitpod.addVscodeExtensions(
-  'https://github.com/microsoft/vscode-eslint/releases/download/release%2F2.2.20-Insider/vscode-eslint-2.2.0.vsix',
+  'https://github.com/neilkuan/vscode-eslint/releases/download/release%2F2.2.2/vscode-eslint-2.2.2.vsix',
 );
-
 
 
 project.synth();
