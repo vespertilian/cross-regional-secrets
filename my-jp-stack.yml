@@ -1,0 +1,440 @@
+Resources:
+  RemoteParamMyHandlerServiceRole7C87A4A9:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyHandler/ServiceRole/Resource
+  RemoteParamMyHandlerServiceRoleDefaultPolicy731777BF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: ssm:GetParametersByPath
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: RemoteParamMyHandlerServiceRoleDefaultPolicy731777BF
+      Roles:
+        - Ref: RemoteParamMyHandlerServiceRole7C87A4A9
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyHandler/ServiceRole/DefaultPolicy/Resource
+  RemoteParamMyHandler0147A3E1:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3S3BucketD1806169
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3S3VersionKey840FE152
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3S3VersionKey840FE152
+      Role:
+        Fn::GetAtt:
+          - RemoteParamMyHandlerServiceRole7C87A4A9
+          - Arn
+      Handler: remote-parameters.on_event
+      Runtime: python3.8
+    DependsOn:
+      - RemoteParamMyHandlerServiceRoleDefaultPolicy731777BF
+      - RemoteParamMyHandlerServiceRole7C87A4A9
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyHandler/Resource
+      aws:asset:path: asset.3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3
+      aws:asset:property: Code
+  RemoteParamMyProviderframeworkonEventServiceRole2E28DFFD:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyProvider/framework-onEvent/ServiceRole/Resource
+  RemoteParamMyProviderframeworkonEventServiceRoleDefaultPolicy63457038:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - RemoteParamMyHandler0147A3E1
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: RemoteParamMyProviderframeworkonEventServiceRoleDefaultPolicy63457038
+      Roles:
+        - Ref: RemoteParamMyProviderframeworkonEventServiceRole2E28DFFD
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource
+  RemoteParamMyProviderframeworkonEventCD3C4A97:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3BucketEAC9DD43
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7
+      Role:
+        Fn::GetAtt:
+          - RemoteParamMyProviderframeworkonEventServiceRole2E28DFFD
+          - Arn
+      Description: AWS CDK resource provider framework - onEvent (my-app-stack-jp/RemoteParam/MyProvider)
+      Environment:
+        Variables:
+          USER_ON_EVENT_FUNCTION_ARN:
+            Fn::GetAtt:
+              - RemoteParamMyHandler0147A3E1
+              - Arn
+      Handler: framework.onEvent
+      Runtime: nodejs12.x
+      Timeout: 900
+    DependsOn:
+      - RemoteParamMyProviderframeworkonEventServiceRoleDefaultPolicy63457038
+      - RemoteParamMyProviderframeworkonEventServiceRole2E28DFFD
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyProvider/framework-onEvent/Resource
+      aws:asset:path: asset.c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c
+      aws:asset:property: Code
+  RemoteParamMyProviderframeworkonEventLogRetentionFC8A3AF5:
+    Type: Custom::LogRetention
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A
+          - Arn
+      LogGroupName:
+        Fn::Join:
+          - ""
+          - - /aws/lambda/
+            - Ref: RemoteParamMyProviderframeworkonEventCD3C4A97
+      RetentionInDays: 1
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/MyProvider/framework-onEvent/LogRetention/Resource
+  RemoteParamSsmParametersBE167F59:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - RemoteParamMyProviderframeworkonEventCD3C4A97
+          - Arn
+      stackName: my-app-stack-jp
+      regionName: ap-northeast-1
+      parameterPath: /my-secret-stack
+      randomString: 0mlje1mm3njs
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/RemoteParam/SsmParameters/Default
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:PutRetentionPolicy
+              - logs:DeleteRetentionPolicy
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      Roles:
+        - Ref: LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource
+  LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Code:
+        S3Bucket:
+          Ref: AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3
+      Role:
+        Fn::GetAtt:
+          - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+          - Arn
+    DependsOn:
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB
+      - LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource
+  LambdaTestSecretServiceRole3647BA7E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LambdaTestSecret/ServiceRole/Resource
+  LambdaTestSecretServiceRoleDefaultPolicy9BF68931:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":secretsmanager:ap-northeast-1:477532313330:secret:"
+                  - Fn::Select:
+                      - 0
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Fn::ImportValue: my-secret-stack:ExportsOutputRefMySecret8FE80B5183540F68
+                  - -??????
+        Version: "2012-10-17"
+      PolicyName: LambdaTestSecretServiceRoleDefaultPolicy9BF68931
+      Roles:
+        - Ref: LambdaTestSecretServiceRole3647BA7E
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LambdaTestSecret/ServiceRole/DefaultPolicy/Resource
+  LambdaTestSecretC446DF36:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile:
+          Fn::Join:
+            - ""
+            - - |-
+                
+                import boto3
+                import json
+                from botocore.exceptions import ClientError
+
+                def lambda_handler(events, context):
+                    secret_name = "
+              - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "-"
+                      - Fn::Select:
+                          - 6
+                          - Fn::Split:
+                              - ":"
+                              - Fn::ImportValue: my-secret-stack:ExportsOutputRefMySecret8FE80B5183540F68
+              - "\"
+
+                \    region_name = \"ap-northeast-1\"
+
+
+                \    session = boto3.session.Session()
+
+                \    client = session.client(
+
+                \        service_name='secretsmanager',
+
+                \        region_name=region_name,
+
+                \    )
+
+
+                \    try:
+
+                \        get_secret_value_response = client.get_secret_value(
+
+                \            SecretId=secret_name
+
+                \        )
+
+                \    except ClientError as e:
+
+                \        if e.response['Error']['Code'] == 'ResourceNotFoundException':
+
+                \            print(\"The requested secret \" + secret_name + \" was not found\")
+
+                \        elif e.response['Error']['Code'] == 'InvalidRequestException':
+
+                \            print(\"The request was invalid due to:\", e)
+
+                \        elif e.response['Error']['Code'] == 'InvalidParameterException':
+
+                \            print(\"The request had invalid params:\", e)
+
+                \        elif e.response['Error']['Code'] == 'DecryptionFailure':
+
+                \            print(\"The requested secret can't be decrypted using the provided KMS key:\", e)
+
+                \        elif e.response['Error']['Code'] == 'InternalServiceError':
+
+                \            print(\"An error occurred on service side:\", e)
+
+                \    else:
+
+                \        # Secrets Manager decrypts the secret value using the associated KMS CMK
+
+                \        # Depending on whether the secret was a string or binary, only one of these fields will be populated
+
+                \        if 'SecretString' in get_secret_value_response:
+
+                \            text_secret_data = get_secret_value_response['SecretString']
+
+                \            print(\"text_secret_data:\" + text_secret_data)
+
+                \        else:
+
+                \            binary_secret_data = get_secret_value_response['SecretBinary']
+
+                \            print(\"binary_secret_data:\" + binary_secret_data)
+
+                \     "
+      Role:
+        Fn::GetAtt:
+          - LambdaTestSecretServiceRole3647BA7E
+          - Arn
+      Handler: index.lambda_handler
+      Runtime: python3.7
+    DependsOn:
+      - LambdaTestSecretServiceRoleDefaultPolicy9BF68931
+      - LambdaTestSecretServiceRole3647BA7E
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/LambdaTestSecret/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/0WOzWrEMAyEn2XvjrYmhV7bDfRUaEifwFW0wZvYKpa8pZi8exNvf04zA9LMZ8G2Fu4Oj+5TGhznY0FOBOVNHc7mSYR0s5OPk+k4iqaMarpzHEg4JyTzZ7osyuE/nmPvkguklPbwmvUj62r2nbK48D46KM85onqO+8GvX413AcrASy2p2vPi8at2VrcaaRu3wwlUxi3DKeNMenJCZuFJ4IWnYVuPt1KseE364RPoE1/9SGk1kUeCixyv9h7sA7SHi3jfpLx9BoLhpt+XtfLuKQEAAA==
+    Metadata:
+      aws:cdk:path: my-app-stack-jp/CDKMetadata/Default
+Parameters:
+  AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3S3BucketD1806169:
+    Type: String
+    Description: S3 bucket for asset "3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3"
+  AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3S3VersionKey840FE152:
+    Type: String
+    Description: S3 key for asset version "3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3"
+  AssetParameters3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3ArtifactHash719A647F:
+    Type: String
+    Description: Artifact hash for asset "3803df2f6849acf50bb6577ee095a669940670e799f70a2be34893a399777bc3"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3BucketEAC9DD43:
+    Type: String
+    Description: S3 bucket for asset "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cS3VersionKeyDD9AE9E7:
+    Type: String
+    Description: S3 key for asset version "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParametersc691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49cArtifactHash627DAAA7:
+    Type: String
+    Description: Artifact hash for asset "c691172cdeefa2c91b5a2907f9d81118e47597634943344795f1a844192dd49c"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3Bucket2070BA0A:
+    Type: String
+    Description: S3 bucket for asset "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827S3VersionKeyB95D17C3:
+    Type: String
+    Description: S3 key for asset version "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+  AssetParametersb120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827ArtifactHash1355580A:
+    Type: String
+    Description: Artifact hash for asset "b120b13d9d868c7622e7db1b68bae4c0f82ffd0227b8c15f2cef38e186ff3827"
+Outputs:
+  importedSecretArnOutput:
+    Value:
+      Fn::GetAtt:
+        - RemoteParamSsmParametersBE167F59
+        - /my-secret-stack/AuthToken
+  secretFromSecretNameV2Arn:
+    Value:
+      Fn::Join:
+        - ""
+        - - "arn:"
+          - Ref: AWS::Partition
+          - ":secretsmanager:ap-northeast-1:477532313330:secret:"
+          - Fn::Select:
+              - 0
+              - Fn::Split:
+                  - "-"
+                  - Fn::Select:
+                      - 6
+                      - Fn::Split:
+                          - ":"
+                          - Fn::ImportValue: my-secret-stack:ExportsOutputRefMySecret8FE80B5183540F68
+

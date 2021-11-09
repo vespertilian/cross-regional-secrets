@@ -1,7 +1,7 @@
 {
   "name": "cross-regional-secrets",
   "scripts": {
-    "build": "npx projen build",
+    "build": "tsc",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",

@@ -58,48 +58,9 @@ export class AppStack extends Stack {
 
   createLambdaTestSecret(secret: secrets.Secret, region: string): void {
     const lambdaFunc = new lambda.Function(this, 'LambdaTestSecret', {
-      code: lambda.Code.fromInline(`
-import boto3
-import json
-from botocore.exceptions import ClientError
-
-def lambda_handler(events, context):
-    secret_name = "${secret.secretName}"
-    region_name = "${region}"
-
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name,
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'ResourceNotFoundException':
-            print("The requested secret " + secret_name + " was not found")
-        elif e.response['Error']['Code'] == 'InvalidRequestException':
-            print("The request was invalid due to:", e)
-        elif e.response['Error']['Code'] == 'InvalidParameterException':
-            print("The request had invalid params:", e)
-        elif e.response['Error']['Code'] == 'DecryptionFailure':
-            print("The requested secret can't be decrypted using the provided KMS key:", e)
-        elif e.response['Error']['Code'] == 'InternalServiceError':
-            print("An error occurred on service side:", e)
-    else:
-        # Secrets Manager decrypts the secret value using the associated KMS CMK
-        # Depending on whether the secret was a string or binary, only one of these fields will be populated
-        if 'SecretString' in get_secret_value_response:
-            text_secret_data = get_secret_value_response['SecretString']
-            print("text_secret_data:" + text_secret_data)
-        else:
-            binary_secret_data = get_secret_value_response['SecretBinary']
-            print("binary_secret_data:" + binary_secret_data)
-     `),
-      handler: 'index.lambda_handler',
-      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset('lambda'),
+      handler: 'hello-world.handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
     });
 
     const secretInRegion = secrets.Secret.fromSecretNameV2(this, `secret${region}`, secret.secretName);
@@ -114,12 +75,12 @@ def lambda_handler(events, context):
 
 const secretEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: 'ap-northeast-1',
+  region: 'ap-southeast-1',
 };
 
 const appJPEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: 'ap-northeast-1',
+  region: 'ap-southeast-2',
 };
 
 const appUSEnv = {
@@ -132,7 +93,7 @@ const app = new App();
 const secretStack = new SecretStack(app, 'my-secret-stack', { env: secretEnv } );
 
 // create the app stack in JP
-const appJP = new AppStack(app, 'my-app-stack-jp', {
+const appJP = new AppStack(app, 'my-app-stack-au', {
   env: appJPEnv,
   secretStack: secretStack,
 });
